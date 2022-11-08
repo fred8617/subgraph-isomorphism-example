@@ -1,0 +1,17 @@
+{
+  "files": {
+    "main.css": "/static/css/main.6975ff22.css",
+    "main.js": "/static/js/main.a29254a2.js",
+    "static/js/787.28cb0dcd.chunk.js": "/static/js/787.28cb0dcd.chunk.js",
+    "worker.js": "/59feed62bbf841535974.worker.js",
+    "static/media/ULLMANN_SIMPLE.wasm": "/static/media/ULLMANN_SIMPLE.4aad1a567755fef5b072.wasm",
+    "index.html": "/index.html",
+    "main.6975ff22.css.map": "/static/css/main.6975ff22.css.map",
+    "main.a29254a2.js.map": "/static/js/main.a29254a2.js.map",
+    "787.28cb0dcd.chunk.js.map": "/static/js/787.28cb0dcd.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.6975ff22.css",
+    "static/js/main.a29254a2.js"
+  ]
+}
