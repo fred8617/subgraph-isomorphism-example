@@ -43,7 +43,7 @@ const Settings = forwardRef<SettingsRef, SettingsProps>(({ ...props }, ref) => {
             }),
           ]}
         >
-          <InputNumber max={100} min={1} />
+          <InputNumber max={100} min={2} />
         </Item>
         <Item
           name="vertexNumberA"
@@ -63,7 +63,7 @@ const Settings = forwardRef<SettingsRef, SettingsProps>(({ ...props }, ref) => {
             }),
           ]}
         >
-          <InputNumber max={100} min={1} />
+          <InputNumber max={100} min={2} />
         </Item>
       </Form>
     </>

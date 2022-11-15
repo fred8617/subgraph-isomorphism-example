@@ -17,10 +17,11 @@ export const useFindIsomorpism = (
       },
       select: (data) => {
         const { result, time, algorithm } = data;
+        const sqrtA = Math.sqrt(simpleDataA.length);
+        const sqrtB = Math.sqrt(simpleDataB.length);
+        const base = { ALength: sqrtA, BLength: sqrtB };
+        const resultMaps: number[][][] = [];
         if (algorithm === FIND_ISOMORPHISM.ULLMANN) {
-          const resultMaps: number[][][] = [];
-          const sqrtA = Math.sqrt(simpleDataA.length);
-          const sqrtB = Math.sqrt(simpleDataB.length);
           const matrix: number[][][] = [];
           for (let i = 0; i < result[0]; i++) {
             const multiSqrt = sqrtA * sqrtB;
@@ -44,10 +45,9 @@ export const useFindIsomorpism = (
             length: matrix.length,
             resultMaps,
             algorithm,
+            ...base,
           };
         } else if (algorithm === FIND_ISOMORPHISM.VF) {
-          const resultMaps: number[][][] = [];
-          const sqrtA = Math.sqrt(simpleDataA.length);
           for (let i = 0; i < result[0]; i++) {
             resultMaps[i] = [];
 
@@ -63,6 +63,7 @@ export const useFindIsomorpism = (
             resultMaps,
             length: resultMaps.length,
             algorithm,
+            ...base,
           };
         }
       },

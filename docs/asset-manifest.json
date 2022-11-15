@@ -1,17 +1,18 @@
 {
   "files": {
     "main.css": "/subgraph-isomorphism-example/static/css/main.6975ff22.css",
-    "main.js": "/subgraph-isomorphism-example/static/js/main.70bb83e3.js",
-    "static/js/787.28cb0dcd.chunk.js": "/subgraph-isomorphism-example/static/js/787.28cb0dcd.chunk.js",
-    "worker.js": "/subgraph-isomorphism-example/ce0f39ea9e91d6244a3e.worker.js",
+    "main.js": "/subgraph-isomorphism-example/static/js/main.af493a6b.js",
+    "static/js/787.abc5b0c7.chunk.js": "/subgraph-isomorphism-example/static/js/787.abc5b0c7.chunk.js",
+    "worker.js": "/subgraph-isomorphism-example/e10a8ef79f9b077f7d71.worker.js",
     "static/media/ULLMANN_SIMPLE.wasm": "/subgraph-isomorphism-example/static/media/ULLMANN_SIMPLE.4aad1a567755fef5b072.wasm",
+    "static/media/VF.wasm": "/subgraph-isomorphism-example/static/media/VF.5c17577493ae89582179.wasm",
     "index.html": "/subgraph-isomorphism-example/index.html",
     "main.6975ff22.css.map": "/subgraph-isomorphism-example/static/css/main.6975ff22.css.map",
-    "main.70bb83e3.js.map": "/subgraph-isomorphism-example/static/js/main.70bb83e3.js.map",
-    "787.28cb0dcd.chunk.js.map": "/subgraph-isomorphism-example/static/js/787.28cb0dcd.chunk.js.map"
+    "main.af493a6b.js.map": "/subgraph-isomorphism-example/static/js/main.af493a6b.js.map",
+    "787.abc5b0c7.chunk.js.map": "/subgraph-isomorphism-example/static/js/787.abc5b0c7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6975ff22.css",
-    "static/js/main.70bb83e3.js"
+    "static/js/main.af493a6b.js"
   ]
 }

@@ -1,12 +1,4 @@
-import React, {
-  FC,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { FC, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Allotment } from "allotment";
 import random from "lodash/random";
 import "allotment/dist/style.css";
@@ -20,7 +12,17 @@ import G6, {
   IEdge,
 } from "@antv/g6";
 import Settings, { SettingsRef } from "./Settings";
-import { Button, Empty, Form, Pagination, Radio, Space, Table } from "antd";
+import {
+  Button,
+  Descriptions,
+  Divider,
+  Form,
+  Pagination,
+  Radio,
+  Space,
+  Table,
+  Tag,
+} from "antd";
 import { FIND_ISOMORPHISM, Provider } from "./context";
 import { useFindIsomorpism } from "./hook";
 import { useQueryClient } from "@tanstack/react-query";
@@ -164,6 +166,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
           style: { fill: "red" },
           labelCfg: { style: { fill: "white" } },
           label: `${idInA + 1}`,
+          zIndex: 9999,
         });
         updates.current.nodes.push(nodeInB);
         const nodeInA = graphA.current!.getNodes()[idInA];
@@ -184,7 +187,10 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                       e.getTarget() === nodeInB_2) ||
                     (e.getSource() === nodeInB_2 && e.getTarget() === nodeInB)
                 );
-              edge?.update({ style: { lineWidth: 3, stroke: "red" } });
+              edge?.update({
+                style: { lineWidth: 3, stroke: "red" },
+                zIndex: 9999,
+              });
               edge && updates.current.edges.push(edge);
             }
           });
@@ -276,7 +282,13 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
           defaultSizes={[800, 500]}
         >
           <Allotment.Pane minSize={200}>
-            <div style={{ height: "100vh" }} id="graphB" />
+            <div style={{ height: "100vh" }} id="graphB" />{" "}
+            <Tag
+              style={{ position: "absolute", right: 0, top: 0 }}
+              color="processing"
+            >
+              <span style={{ fontSize: 20 }}>B(原图)</span>
+            </Tag>
           </Allotment.Pane>
           <Allotment.Pane minSize={200}>
             <Allotment
@@ -288,8 +300,14 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
             >
               <Allotment.Pane minSize={200}>
                 <div id="graphA" style={{ height: `100%` }} />
+                <Tag
+                  style={{ position: "absolute", left: 0, top: 0 }}
+                  color="processing"
+                >
+                  <span style={{ fontSize: 20 }}>A(子图)</span>
+                </Tag>
               </Allotment.Pane>
-              <div style={{ padding: 16 }}>
+              <div style={{ padding: 16, overflow: "auto" }}>
                 <Form.Item label="算法">
                   <Radio.Group
                     onChange={(e) => {
@@ -324,6 +342,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                       查找子图
                     </Button>
                     <Button
+                      disabled={isFetching}
                       onClick={async () => {
                         const values =
                           await settingsRef.current?.form.validateFields();
@@ -342,81 +361,115 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                     >
                       重新生成图
                     </Button>
-                    <Button danger onClick={reset}>
+                    <Button disabled={isFetching} danger onClick={reset}>
                       删除结果集
                     </Button>
                   </Space>
                   {data && data.length > 0 && resultIndex !== null && (
                     <>
-                      <Table
-                        bordered
-                        size="small"
-                        dataSource={
-                          data.algorithm === FIND_ISOMORPHISM.ULLMANN
-                            ? data.matrix![resultIndex].map((e, i) => {
-                                return {
-                                  row: i + 1,
-                                  ...Object.fromEntries(
-                                    e.map((f, i) => [i, f])
-                                  ),
-                                };
-                              })
-                            : data.resultMaps[resultIndex].map(([A, B], i) => ({
-                                row: i + 1,
-                                A: A + 1,
-                                B: B + 1,
-                              }))
-                        }
-                        rowKey={"row"}
-                        pagination={false}
-                        columns={
-                          data.algorithm === FIND_ISOMORPHISM.ULLMANN
-                            ? [
-                                {
-                                  dataIndex: "row",
-                                  key: `row`,
-                                  align: "center",
-                                  className: "Array-M-Row",
-                                },
-                                ...data.matrix![0][0].map<ColumnType<any>>(
-                                  (_d, i) => {
+                      <Divider>查询结果</Divider>
+                      <Descriptions column={2} bordered size="small">
+                        <Descriptions.Item span={2} label="算法">
+                          {data.algorithm}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="图B(原图个数)">
+                          {data.BLength}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="图A(子图个数)">
+                          {data.ALength}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="运行时长">
+                          {data.time > 1000
+                            ? data.time > 1000 * 60
+                              ? `${(data.time / 1000 / 60).toFixed(2)}min`
+                              : `${data.time / 1000}s`
+                            : `${data.time}ms`}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="匹配个数">
+                          {data.length}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="结果集" span={2}>
+                          <Table
+                            bordered
+                            size="small"
+                            dataSource={
+                              data.algorithm === FIND_ISOMORPHISM.ULLMANN
+                                ? data.matrix![resultIndex].map((e, i) => {
                                     return {
-                                      dataIndex: i,
-                                      title: (
-                                        <div className="Array-M-Column">
-                                          {i + 1}
-                                        </div>
+                                      row: i + 1,
+                                      ...Object.fromEntries(
+                                        e.map((f, i) => [i, f])
                                       ),
-                                      align: "center",
-                                      render(data) {
-                                        if (data === 1) {
-                                          return (
-                                            <b style={{ color: "red" }}>
-                                              {data}
-                                            </b>
-                                          );
-                                        }
-                                        return data;
-                                      },
                                     };
-                                  }
-                                ),
-                              ]
-                            : [
-                                { title: "A", dataIndex: "A", align: "center" },
-                                { title: "B", dataIndex: "B", align: "center" },
-                              ]
-                        }
-                      />
-                      <Pagination
-                        simple
-                        pageSize={1}
-                        onChange={(page) => {
-                          setResultIndex(page - 1);
-                        }}
-                        current={resultIndex + 1}
-                        total={data.length}
-                      />
+                                  })
+                                : data.resultMaps[resultIndex].map(
+                                    ([A, B], i) => ({
+                                      row: i + 1,
+                                      A: A + 1,
+                                      B: B + 1,
+                                    })
+                                  )
+                            }
+                            rowKey={"row"}
+                            pagination={false}
+                            columns={
+                              data.algorithm === FIND_ISOMORPHISM.ULLMANN
+                                ? [
+                                    {
+                                      dataIndex: "row",
+                                      key: `row`,
+                                      align: "center",
+                                      className: "Array-M-Row",
+                                    },
+                                    ...data.matrix![0][0].map<ColumnType<any>>(
+                                      (_d, i) => {
+                                        return {
+                                          dataIndex: i,
+                                          title: (
+                                            <div className="Array-M-Column">
+                                              {i + 1}
+                                            </div>
+                                          ),
+                                          align: "center",
+                                          render(data) {
+                                            if (data === 1) {
+                                              return (
+                                                <b style={{ color: "red" }}>
+                                                  {data}
+                                                </b>
+                                              );
+                                            }
+                                            return data;
+                                          },
+                                        };
+                                      }
+                                    ),
+                                  ]
+                                : [
+                                    {
+                                      title: "A",
+                                      dataIndex: "A",
+                                      align: "center",
+                                    },
+                                    {
+                                      title: "B",
+                                      dataIndex: "B",
+                                      align: "center",
+                                    },
+                                  ]
+                            }
+                          />
+                          <Pagination
+                            simple
+                            pageSize={1}
+                            onChange={(page) => {
+                              setResultIndex(page - 1);
+                            }}
+                            current={resultIndex + 1}
+                            total={data.length}
+                          />
+                        </Descriptions.Item>
+                      </Descriptions>
                     </>
                   )}
                 </Space>
