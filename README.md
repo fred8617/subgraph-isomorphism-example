@@ -14,4 +14,4 @@ git pull
 
 # Activate PATH and other environment variables in the current terminal
 source ./emsdk_env.sh
-emcc ULLMANN_SIMPLE.c -s EXPORTED_FUNCTIONS="['_callback']" EXTRA_EXPORTED_RUNTIME_METHODS="['_ccall','_cwrap']" -o src/ULLMANN_SIMPLE.wasm --no-entry
+emcc ULLMANN_SIMPLE.c -s EXPORTED_FUNCTIONS="['_callback']" -o src/ULLMANN_SIMPLE.wasm --no-entry

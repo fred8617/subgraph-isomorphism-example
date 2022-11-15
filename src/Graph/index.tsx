@@ -20,11 +20,12 @@ import G6, {
   IEdge,
 } from "@antv/g6";
 import Settings, { SettingsRef } from "./Settings";
-import { Button, Empty, Pagination, Space, Table } from "antd";
-import { Provider } from "./context";
+import { Button, Empty, Form, Pagination, Radio, Space, Table } from "antd";
+import { FIND_ISOMORPHISM, Provider } from "./context";
 import { useFindIsomorpism } from "./hook";
 import { useQueryClient } from "@tanstack/react-query";
 import { ColumnType } from "antd/lib/table";
+import { sourceA, sourceB } from "./data";
 export type GraphProps = {};
 const defaultEdgeStyle = { lineWidth: 1, stroke: "rgb(95, 149, 255)" };
 // 实例化 minimap 插件
@@ -103,11 +104,13 @@ const generateRandomGraph = (verticesLength: number) => {
   }
   return arr.flat();
 };
-const sourceA = [0, 1, 1, 1, 0, 0, 1, 0, 0];
-const sourceB = [0, 1, 1, 0, 1, 0, 1, 1, 1, 1, 0, 1, 0, 1, 1, 0];
+
 const Graph: FC<GraphProps> = ({ ...props }) => {
   let graphA = useRef<G>();
   let graphB = useRef<G>();
+  const [algorithm, setAlgorithm] = useState<FIND_ISOMORPHISM>(
+    FIND_ISOMORPHISM.ULLMANN
+  );
   const [simpleDataA, setSimpleDataA] = useState<number[]>(sourceA);
   const [simpleDataB, setSimpleDataB] = useState<number[]>(sourceB);
 
@@ -118,7 +121,8 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
   );
   const { refetch, isFetching, queryKey, data, remove } = useFindIsomorpism(
     simpleDataA,
-    simpleDataB
+    simpleDataB,
+    algorithm
   );
   const [resultIndex, setResultIndex] = useState<number | null>(null);
   const resultMap = useMemo(() => {
@@ -259,6 +263,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
     resetNode();
     updates.current = { nodes: [], edges: [] };
   };
+  console.log(data);
 
   return (
     <>
@@ -285,6 +290,27 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                 <div id="graphA" style={{ height: `100%` }} />
               </Allotment.Pane>
               <div style={{ padding: 16 }}>
+                <Form.Item label="算法">
+                  <Radio.Group
+                    onChange={(e) => {
+                      setAlgorithm(e.target.value);
+                    }}
+                    value={algorithm}
+                    optionType="button"
+                    buttonStyle="solid"
+                    options={[
+                      {
+                        label: FIND_ISOMORPHISM.ULLMANN as string,
+                        value: FIND_ISOMORPHISM.ULLMANN,
+                      },
+                      {
+                        label: FIND_ISOMORPHISM.VF as string,
+                        value: FIND_ISOMORPHISM.VF,
+                      },
+                    ]}
+                  />
+                </Form.Item>
+
                 <Settings ref={settingsRef} />
                 <Space direction="vertical">
                   <Space>
@@ -324,38 +350,63 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                     <>
                       <Table
                         bordered
-                        pagination={false}
                         size="small"
-                        dataSource={data.matrix[resultIndex].map((e, i) => {
-                          return {
-                            row: i + 1,
-                            ...Object.fromEntries(e.map((f, i) => [i, f])),
-                          };
-                        })}
+                        dataSource={
+                          data.algorithm === FIND_ISOMORPHISM.ULLMANN
+                            ? data.matrix![resultIndex].map((e, i) => {
+                                return {
+                                  row: i + 1,
+                                  ...Object.fromEntries(
+                                    e.map((f, i) => [i, f])
+                                  ),
+                                };
+                              })
+                            : data.resultMaps[resultIndex].map(([A, B], i) => ({
+                                row: i + 1,
+                                A: A + 1,
+                                B: B + 1,
+                              }))
+                        }
                         rowKey={"row"}
-                        columns={[
-                          {
-                            dataIndex: "row",
-                            key: `row`,
-                            align: "center",
-                            className: "Array-M-Row",
-                          },
-                          ...data.matrix[0][0].map<ColumnType<any>>((_d, i) => {
-                            return {
-                              dataIndex: i,
-                              title: (
-                                <div className="Array-M-Column">{i + 1}</div>
-                              ),
-                              align: "center",
-                              render(data) {
-                                if (data === 1) {
-                                  return <b style={{ color: "red" }}>{data}</b>;
-                                }
-                                return data;
-                              },
-                            };
-                          }),
-                        ]}
+                        pagination={false}
+                        columns={
+                          data.algorithm === FIND_ISOMORPHISM.ULLMANN
+                            ? [
+                                {
+                                  dataIndex: "row",
+                                  key: `row`,
+                                  align: "center",
+                                  className: "Array-M-Row",
+                                },
+                                ...data.matrix![0][0].map<ColumnType<any>>(
+                                  (_d, i) => {
+                                    return {
+                                      dataIndex: i,
+                                      title: (
+                                        <div className="Array-M-Column">
+                                          {i + 1}
+                                        </div>
+                                      ),
+                                      align: "center",
+                                      render(data) {
+                                        if (data === 1) {
+                                          return (
+                                            <b style={{ color: "red" }}>
+                                              {data}
+                                            </b>
+                                          );
+                                        }
+                                        return data;
+                                      },
+                                    };
+                                  }
+                                ),
+                              ]
+                            : [
+                                { title: "A", dataIndex: "A", align: "center" },
+                                { title: "B", dataIndex: "B", align: "center" },
+                              ]
+                        }
                       />
                       <Pagination
                         simple
@@ -363,7 +414,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                         onChange={(page) => {
                           setResultIndex(page - 1);
                         }}
-                        defaultCurrent={1}
+                        current={resultIndex + 1}
                         total={data.length}
                       />
                     </>
