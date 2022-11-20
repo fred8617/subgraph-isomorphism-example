@@ -1,5 +1,6 @@
-import ULLMANN_WASM from "./ULLMANN_SIMPLE.wasm";
+import ULLMANN_WASM from "./ULLMANN.wasm";
 import VF_WASM from "./VF.wasm";
+import VF2_WASM from "./VF2.wasm";
 function loadWasm(fileName) {
   return fetch(fileName).then((response) => {
     return response.arrayBuffer().then((bytes) => {
@@ -30,6 +31,44 @@ function loadWasm(fileName) {
     });
   });
 }
+export const VF2 = async (b, a) => {
+  console.log("入参");
+  console.log("A", JSON.stringify(a));
+  console.log("B", JSON.stringify(b));
+  const Module = await loadWasm(VF2_WASM);
+  const { memory } = Module.exports;
+  const sqrtA = Math.sqrt(a.length);
+  const sqrtB = Math.sqrt(b.length);
+  let offset = 0;
+  const A = new Int32Array(memory.buffer, offset);
+  A.set(a);
+  offset += a.length * Int32Array.BYTES_PER_ELEMENT;
+  const B = new Int32Array(memory.buffer, offset);
+  B.set(b);
+  offset += b.length * Int32Array.BYTES_PER_ELEMENT;
+  const start = new Date().getTime();
+  const r = Module.exports.VF2(sqrtA, sqrtB, A.byteOffset, B.byteOffset);
+  const end = new Date().getTime();
+  const result = new Int32Array(memory.buffer, r);
+  console.log(result);
+  setTimeout(() => {
+    for (let i = 0; i < result[0]; i++) {
+      const index = i + 1;
+      console.log(`result ${index}`);
+      let str = "";
+      for (let j = 0; j < sqrtB; j++) {
+        str +=
+          result[1 + 2 * i * sqrtB + j * 2] +
+          " " +
+          result[1 + 2 * i * sqrtB + j * 2 + 1] +
+          "\n";
+      }
+      console.log(str);
+    }
+  }, 1);
+
+  return { result, time: end - start, algorithm: "VF2" };
+};
 export const VF = async (b, a) => {
   console.log("入参");
   console.log("A", JSON.stringify(a));
@@ -84,25 +123,39 @@ export const ULLMANN = async (a, b) => {
   B.set(b);
   offset += b.length * Int32Array.BYTES_PER_ELEMENT;
   const start = new Date().getTime();
-  const r = Module.exports.callback(sqrtA, sqrtB, A.byteOffset, B.byteOffset);
+  const r = Module.exports.ULLMANN(sqrtA, sqrtB, A.byteOffset, B.byteOffset);
   const end = new Date().getTime();
   const result = new Int32Array(memory.buffer, r);
   console.log(result);
+  const length = result[0];
+  const matrix = [];
+  for (let i = 0; i < length; i++) {
+    matrix[i] = [];
+    for (let j = 0; j < sqrtA; j++) {
+      matrix[i][j] = new Array(sqrtB).fill(0);
+    }
+  }
+  for (let i = 0; i < length; i++) {
+    const base = 1 + i * sqrtA * 2;
+
+    for (let j = 0; j < sqrtA; j++) {
+      const _i = result[base + j * 2];
+      const _j = result[base + j * 2 + 1];
+      matrix[i][_i][_j] = 1;
+    }
+  }
   setTimeout(() => {
     for (let i = 0; i < result[0]; i++) {
       const index = i + 1;
       console.log(`result ${index}`);
+      const result = matrix[i];
       let str = "";
-      const multiSqrt = sqrtA * sqrtB;
-      for (let j = 0; j < multiSqrt; j++) {
-        str += result[j + 1 + i * multiSqrt] + " ";
-        if ((j + 1) % sqrtB === 0) {
-          str += "\n";
-        }
+      for (let j = 0; j < sqrtA; j++) {
+        str += result[j].join(" ") + "\n";
       }
       console.log(str);
     }
   }, 1);
 
-  return { result, time: end - start, algorithm: "ULLMANN" };
+  return { result, time: end - start, algorithm: "ULLMANN", matrix };
 };

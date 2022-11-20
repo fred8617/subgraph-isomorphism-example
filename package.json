@@ -1,6 +1,6 @@
 {
   "name": "subgraph-isomorphism-example",
-  "version": "1.0.0-beta",
+  "version": "1.0.0",
   "private": true,
   "homepage": "https://fred8617.github.io/subgraph-isomorphism-example",
   "dependencies": {

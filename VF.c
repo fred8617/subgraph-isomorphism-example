@@ -322,7 +322,7 @@ int *VF(
     int *G2)
 {
     int resultLength = 0;
-    int result[500000];
+    int result[1000000];
     int state[p2 * 2];
     Match(state, 0, p1, p2, G1, G2, result, &resultLength);
     result[0] = resultLength;

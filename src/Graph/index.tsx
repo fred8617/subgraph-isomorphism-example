@@ -307,7 +307,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                   <span style={{ fontSize: 20 }}>A(子图)</span>
                 </Tag>
               </Allotment.Pane>
-              <div style={{ padding: 16, overflow: "auto" }}>
+              <div style={{ padding: 16, overflow: "auto", height: `100%` }}>
                 <Form.Item label="算法">
                   <Radio.Group
                     onChange={(e) => {
@@ -324,6 +324,10 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                       {
                         label: FIND_ISOMORPHISM.VF as string,
                         value: FIND_ISOMORPHISM.VF,
+                      },
+                      {
+                        label: FIND_ISOMORPHISM.VF2 as string,
+                        value: FIND_ISOMORPHISM.VF2,
                       },
                     ]}
                   />
@@ -410,20 +414,25 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                                     })
                                   )
                             }
+                            scroll={{ x: "max-context" }}
+                            style={{ maxWidth: 300 }}
                             rowKey={"row"}
                             pagination={false}
                             columns={
                               data.algorithm === FIND_ISOMORPHISM.ULLMANN
                                 ? [
                                     {
+                                      width: 30,
                                       dataIndex: "row",
                                       key: `row`,
                                       align: "center",
                                       className: "Array-M-Row",
+                                      fixed: true,
                                     },
                                     ...data.matrix![0][0].map<ColumnType<any>>(
                                       (_d, i) => {
                                         return {
+                                          width: 30,
                                           dataIndex: i,
                                           title: (
                                             <div className="Array-M-Column">

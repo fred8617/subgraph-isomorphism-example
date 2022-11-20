@@ -7,6 +7,7 @@ type GraphContext = {
 export enum FIND_ISOMORPHISM {
   ULLMANN = "ULLMANN",
   VF = "VF",
+  VF2 = "VF2",
 }
 export const Context = React.createContext<GraphContext>({} as GraphContext);
 const { Provider } = Context;
