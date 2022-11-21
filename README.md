@@ -59,13 +59,13 @@ VF2算法则是原作者在VF算法上进行了空间优化以及对校验安全
 
 2.成边比例调整到50%，可以看出VF2算法比VF算法略快
 
-![report2.1](/public/report1.1.jpg)
-![report2.2](/public/report1.2.jpg)
+![report2.1](/public/report2.1.jpg)
+![report2.2](/public/report2.2.jpg)
 
 3.成边比例调整到100%，可以看出VF2算法的速度要明显优于VF算法
 
-![report3.1](/public/report1.1.jpg)
-![report3.2](/public/report1.2.jpg)
+![report3.1](/public/report3.1.jpg)
+![report3.2](/public/report3.2.jpg)
 
 #### 参考文献
 
