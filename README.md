@@ -49,7 +49,7 @@ VF2算法则是原作者在VF算法上进行了空间优化以及对校验安全
 ![VF ULLMANN](/public/ST1.jpg)
 ![V2 ULLMANN](/public/ST2.jpg)
 
-####参考文献
+#### 参考文献
 
 1. An Algorithm for Subgraph Isomorphism J. R. ULLMANN - 1976
 2. Subgraph Transformations for the Inexact Matching of Attributed Relational Graphs L. P. CordelIa, P. Foggia, C. Sansone, and M. Vento, Naples - 1998
