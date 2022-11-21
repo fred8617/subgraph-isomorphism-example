@@ -49,6 +49,24 @@ VF2算法则是原作者在VF算法上进行了空间优化以及对校验安全
 ![VF ULLMANN](/public/ST1.jpg)
 ![V2 ULLMANN](/public/ST2.jpg)
 
+### 实验结果
+
+1.我们先按照10%的两点成边概率进行三种算法的对比，发现ULLMANN明显慢于VF与VF2算法，故后面的比较不在加入ULLMANN算法进行对比
+
+![report1.1](/public/report1.1.jpg)
+![report1.2](/public/report1.2.jpg)
+![report1.3](/public/report1.3.jpg)
+
+2.成边比例调整到50%，可以看出VF2算法比VF算法略快
+
+![report2.1](/public/report1.1.jpg)
+![report2.2](/public/report1.2.jpg)
+
+3.成边比例调整到100%，可以看出VF2算法的速度要明显优于VF算法
+
+![report3.1](/public/report1.1.jpg)
+![report3.2](/public/report1.2.jpg)
+
 #### 参考文献
 
 1. An Algorithm for Subgraph Isomorphism J. R. ULLMANN - 1976

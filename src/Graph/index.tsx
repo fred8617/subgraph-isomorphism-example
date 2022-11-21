@@ -78,7 +78,7 @@ const randomExcept = (lower: number, upper: number, except: number): number => {
   }
   return r;
 };
-const generateRandomGraph = (verticesLength: number) => {
+const generateRandomGraph = (verticesLength: number, percent: number) => {
   const arr: number[][] = [];
   for (let i = 0; i < verticesLength; i++) {
     arr[i] = [];
@@ -86,7 +86,7 @@ const generateRandomGraph = (verticesLength: number) => {
   for (let i = 0; i < verticesLength; i++) {
     arr[i][i] = 0;
     for (let j = i + 1; j < verticesLength; j++) {
-      const hasEdge = Math.round(Math.random());
+      const hasEdge = random(1, 10) <= percent * 10 ? 1 : 0;
       arr[i][j] = hasEdge;
       arr[j][i] = hasEdge;
     }
@@ -110,6 +110,7 @@ const generateRandomGraph = (verticesLength: number) => {
 const Graph: FC<GraphProps> = ({ ...props }) => {
   let graphA = useRef<G>();
   let graphB = useRef<G>();
+  let percent = useRef<number>(0.7);
   const [algorithm, setAlgorithm] = useState<FIND_ISOMORPHISM>(
     FIND_ISOMORPHISM.ULLMANN
   );
@@ -269,7 +270,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
     resetNode();
     updates.current = { nodes: [], edges: [] };
   };
-  console.log(data);
+  console.log(data, percent.current);
 
   return (
     <>
@@ -353,13 +354,20 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                         if (!values) {
                           return;
                         }
+                        percent.current = values.percent;
                         queryClient.cancelQueries(queryKey);
                         reset();
                         setSimpleDataA(
-                          generateRandomGraph(values.vertexNumberA)
+                          generateRandomGraph(
+                            values.vertexNumberA,
+                            values.percent
+                          )
                         );
                         setSimpleDataB(
-                          generateRandomGraph(values.vertexNumberB)
+                          generateRandomGraph(
+                            values.vertexNumberB,
+                            values.percent
+                          )
                         );
                       }}
                     >
@@ -374,8 +382,11 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                     <>
                       <Divider>查询结果</Divider>
                       <Descriptions column={2} bordered size="small">
-                        <Descriptions.Item span={2} label="算法">
+                        <Descriptions.Item label="算法">
                           {data.algorithm}
+                        </Descriptions.Item>
+                        <Descriptions.Item label="成边比例">
+                          {`${percent.current * 100}%`}
                         </Descriptions.Item>
                         <Descriptions.Item label="图B(原图个数)">
                           {data.BLength}
