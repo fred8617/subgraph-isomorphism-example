@@ -182,14 +182,14 @@ int R_new(
     int mLength = 0;
     for (int i = 0; i < p1; i++)
     {
-        if (*(G1 + n * p1 + i) == 1 && NOT_IN(M1, stateLength, i) && NOT_IN(T1, *T1Length, i))
+        if (*(G1 + n * p1 + i) == 1 && NOT_IN(M1, stateLength, i))
         {
             nLength++;
         }
     }
     for (int i = 0; i < p2; i++)
     {
-        if (*(G2 + m * p2 + i) == 1 && NOT_IN(M2, stateLength, i) && NOT_IN(T2, *T2Length, i))
+        if (*(G2 + m * p2 + i) == 1 && NOT_IN(M2, stateLength, i))
         {
             mLength++;
         }

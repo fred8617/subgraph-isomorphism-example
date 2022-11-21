@@ -182,7 +182,7 @@ int R_new(
         int core = core_1[i];
         int connected = connected_1[i];
         int n_ = *(G1 + n * p1 + i);
-        if (*(G1 + n * p1 + i) == 1 && core_1[i] == -1 && connected_1[i] < 0)
+        if (*(G1 + n * p1 + i) == 1 && core_1[i] == -1)
         {
             nLength++;
         }
@@ -192,7 +192,7 @@ int R_new(
         int core = core_1[i];
         int connected = connected_1[i];
         int m_ = *(G2 + m * p2 + i);
-        if (*(G2 + m * p2 + i) == 1 && core_2[i] == -1 && connected_2[i] < 0)
+        if (*(G2 + m * p2 + i) == 1 && core_2[i] == -1)
         {
             mLength++;
         }
