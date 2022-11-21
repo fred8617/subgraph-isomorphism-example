@@ -1,16 +1,6 @@
-#include <stdio.h>
-void print_matrix(int *M, int pa, int pb)
-{
-    for (int i = 0; i < pa; i++)
-    {
-        for (int j = 0; j < pb; j++)
-        {
-            printf("%d ", *(M + i * pb + j));
-        }
-        printf("\n");
-    }
-}
-
+/**
+ * 这个是自己重写的版本，原文中的版本采用了大量的goto语句，可读性与可维护性都不好，所以采用递归的方式重写了一次
+ * */
 int is_isomorphism(int *A, int *B, int pa, int pb, int *M)
 {
     int temp[pa * pb];

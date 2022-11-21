@@ -1,27 +1,3 @@
-#include <stdio.h>
-void print_matrix(int *G, int row, int col)
-{
-    for (int i = 0; i < row; i++)
-    {
-        for (int j = 0; j < col; j++)
-        {
-            int a = *(G + i * col + j);
-            printf("%d ", a + 1);
-        }
-        printf("\n");
-    }
-}
-
-void print_arr(int M[], int len)
-{
-    for (int i = 0; i < len; i++)
-    {
-        int a = M[i];
-        printf("%d ", a + 1);
-    }
-    printf("\n");
-}
-
 int NOT_IN(int arr[], int arrLength, int value)
 {
 

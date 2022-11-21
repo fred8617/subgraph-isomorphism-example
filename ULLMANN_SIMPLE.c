@@ -1,4 +1,7 @@
 #include <stdio.h>
+/**
+ * 这个是原论文中的版本,可读性不是很好，所以导致出现bug比较难修复
+ * */
 int pa = 0;
 int pb = 0;
 int max = 9999;
