@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/subgraph-isomorphism-example/static/css/main.6975ff22.css",
-    "main.js": "/subgraph-isomorphism-example/static/js/main.1f66d4c9.js",
+    "main.js": "/subgraph-isomorphism-example/static/js/main.1afb9913.js",
     "static/js/787.abc5b0c7.chunk.js": "/subgraph-isomorphism-example/static/js/787.abc5b0c7.chunk.js",
     "worker.js": "/subgraph-isomorphism-example/ac800c6237196ea9e142.worker.js",
     "static/media/VF2.wasm": "/subgraph-isomorphism-example/static/media/VF2.8ae2e19f4217835476a0.wasm",
@@ -9,11 +9,11 @@
     "static/media/ULLMANN.wasm": "/subgraph-isomorphism-example/static/media/ULLMANN.421d1fe256aa8169da4c.wasm",
     "index.html": "/subgraph-isomorphism-example/index.html",
     "main.6975ff22.css.map": "/subgraph-isomorphism-example/static/css/main.6975ff22.css.map",
-    "main.1f66d4c9.js.map": "/subgraph-isomorphism-example/static/js/main.1f66d4c9.js.map",
+    "main.1afb9913.js.map": "/subgraph-isomorphism-example/static/js/main.1afb9913.js.map",
     "787.abc5b0c7.chunk.js.map": "/subgraph-isomorphism-example/static/js/787.abc5b0c7.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6975ff22.css",
-    "static/js/main.1f66d4c9.js"
+    "static/js/main.1afb9913.js"
   ]
 }

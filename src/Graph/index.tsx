@@ -369,6 +369,7 @@ const Graph: FC<GraphProps> = ({ ...props }) => {
                       删除结果集
                     </Button>
                   </Space>
+                  {data && data.length === 0 && <Divider>查无结果</Divider>}
                   {data && data.length > 0 && resultIndex !== null && (
                     <>
                       <Divider>查询结果</Divider>
