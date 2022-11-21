@@ -14,7 +14,7 @@ void ComputeT(
         int row = vertex * GLength;
         for (int j = 0; j < GLength; j++)
         {
-            // 需要排除已经被添加到状态中的点，以及已经被添加到terminal中的点
+            // VF2在此处进行了优化
             if (*(G + row + j) == 1 && core[j] == -1 && connected[j] < 0)
             {
                 T[*TLength] = j;
@@ -179,9 +179,7 @@ int R_new(
     int mLength = 0;
     for (int i = 0; i < p1; i++)
     {
-        int core = core_1[i];
-        int connected = connected_1[i];
-        int n_ = *(G1 + n * p1 + i);
+        // VF2在此处进行了优化
         if (*(G1 + n * p1 + i) == 1 && core_1[i] == -1)
         {
             nLength++;
@@ -189,9 +187,7 @@ int R_new(
     }
     for (int i = 0; i < p2; i++)
     {
-        int core = core_1[i];
-        int connected = connected_1[i];
-        int m_ = *(G2 + m * p2 + i);
+        // VF2在此处进行了优化
         if (*(G2 + m * p2 + i) == 1 && core_2[i] == -1)
         {
             mLength++;
@@ -235,7 +231,9 @@ void Match(
     int T2Length = 0;
     int P[p1 * p2 * 2];
     int PLength = 0;
+    // 如果点n在T中或者M中，则connected_1[n]=0;否则为-1;
     int connected_1[p1];
+    // 如果点m在T中或者M中，则connected_2[m]=0;否则为-1;
     int connected_2[p2];
     for (int i = 0; i < p1; i++)
     {
@@ -245,7 +243,6 @@ void Match(
     {
         connected_2[i] = -1;
     }
-
     ComputeP(
         G1,
         G2,
@@ -286,7 +283,7 @@ void Match(
             connected_1[n] = stateLength;
             connected_2[m] = stateLength;
             int newStateLength = stateLength + 1;
-
+            // 相对于VF不在声明新的state，共用同一state，core数组
             Match(
                 state,
                 newStateLength,
@@ -326,9 +323,10 @@ int *VF2(
     int state[p2 * 2];
     int M1[p2];
     int M2[p2];
+    // 记录与M1中成对的点，未成对则赋值-1，否则为core_1[n]=m
     int core_1[p1];
+    // 记录与M2中成对的点，未成对则赋值-1，，否则为core_1[m]=n
     int core_2[p2];
-
     for (int i = 0; i < p1; i++)
     {
         core_1[i] = -1;

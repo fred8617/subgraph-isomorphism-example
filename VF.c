@@ -1,3 +1,4 @@
+// 不在当前数组中的值
 int NOT_IN(int arr[], int arrLength, int value)
 {
 
@@ -11,7 +12,7 @@ int NOT_IN(int arr[], int arrLength, int value)
     }
     return 1;
 }
-
+// 计算当前图中未加入state的所有邻接点
 void ComputeT(
     int *G,
     int GLength,
@@ -36,6 +37,7 @@ void ComputeT(
     }
 }
 
+// 计算加入state的候选pair
 void ComputeP(
     int *G1,
     int *G2,
@@ -71,6 +73,7 @@ void ComputeP(
     {
         return;
     }
+    // 从图2中较小的点开始
     int min = T2[0];
     for (int i = 1; i < *T2Length; i++)
     {
@@ -79,6 +82,7 @@ void ComputeP(
             min = T2[i];
         }
     }
+    // 与图1中的点一一成对
     for (int i = 0; i < *T1Length; i++)
     {
         int row = (*PLength) * 2;
@@ -200,7 +204,7 @@ int R_new(
     }
     return 0;
 }
-
+// 计算出已经加入state中的点
 void ComputeM(
     int *state,
     int stateLength,
@@ -224,7 +228,7 @@ void Match(
     int *resultLength)
 {
     if (stateLength == p2)
-    {
+    { //输出结果集
         for (int i = 0; i < p2; i++)
         {
             result[1 + (*resultLength) * p2 * 2 + 2 * i] = state[2 * i];
@@ -233,14 +237,18 @@ void Match(
         (*resultLength)++;
         return;
     }
-
+    // 与当前state下图1中所有点邻接的点
     int T1[p1];
     int T1Length = 0;
+    // 与当前state下图2中所有点邻接的点
     int T2[p2];
     int T2Length = 0;
+    // 加入state的候选pairs
     int P[p1 * p2 * 2];
     int PLength = 0;
+    // 图1中已经加入state的点
     int M1[p2];
+    // 图2中已经加入state的点
     int M2[p2];
     ComputeM(state, stateLength, M1, 0);
     ComputeM(state, stateLength, M2, 1);
@@ -278,7 +286,6 @@ void Match(
                 newState[j * 2] = *(state + j * 2);
                 newState[j * 2 + 1] = *(state + j * 2 + 1);
             }
-
             Match(newState, newStateLength, p1, p2, G1, G2, result, resultLength);
         }
     }
